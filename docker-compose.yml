@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  web:
+    image: nginx:latest  # Usa la imagen oficial de Nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/usr/share/nginx/html  # Monta la carpeta local dentro del contenedor
+
