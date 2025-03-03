@@ -21,3 +21,16 @@ jobs:
 
       - name: Subir la imagen a Docker Hub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/mi-web-docker:latest
+
+  deploy:
+    runs-on: self-hosted  # Servidor que ejecuta el contenedor
+    needs: build-and-push
+    steps:
+      - name: Descargar nueva imagen
+        run: docker pull ${{ secrets.DOCKER_USERNAME }}/mi-web-docker:latest
+
+      - name: Detener el contenedor anterior
+        run: docker stop mi-web-container || true && docker rm mi-web-container || true
+
+      - name: Ejecutar el nuevo contenedor
+        run: docker run -d -p 8080:80 --name mi-web-container ${{ secrets.DOCKER_USERNAME }}/mi-web-docker:latest
